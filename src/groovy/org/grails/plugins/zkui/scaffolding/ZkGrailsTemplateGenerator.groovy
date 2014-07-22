@@ -7,7 +7,7 @@ import org.apache.commons.logging.LogFactory
 import org.codehaus.groovy.grails.cli.CommandLineHelper
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.scaffolding.DomainClassPropertyComparator
-import org.codehaus.groovy.grails.scaffolding.GrailsTemplateGenerator
+import org.codehaus.groovy.grails.scaffolding.AbstractGrailsTemplateGenerator
 import org.codehaus.groovy.grails.scaffolding.SimpleDomainClassPropertyComparator
 import org.springframework.context.ResourceLoaderAware
 import org.springframework.core.io.FileSystemResource
@@ -18,7 +18,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.PluginManagerAware
 import org.codehaus.groovy.grails.plugins.GrailsPluginManager
 
-class ZkGrailsTemplateGenerator implements GrailsTemplateGenerator, ResourceLoaderAware, PluginManagerAware {
+class ZkGrailsTemplateGenerator extends AbstractGrailsTemplateGenerator implements ResourceLoaderAware, PluginManagerAware {
     static final Log LOG = LogFactory.getLog(ZkGrailsTemplateGenerator)
 
     String basedir = "."
@@ -256,7 +256,7 @@ class ZkGrailsTemplateGenerator implements GrailsTemplateGenerator, ResourceLoad
         t.make(binding).writeTo(out)
     }
 
-    private String getPropertyName(GrailsDomainClass domainClass) { "${domainClass.propertyName}${domainSuffix}" }
+    String getPropertyName(GrailsDomainClass domainClass) { "${domainClass.propertyName}${domainSuffix}" }
 
     private helper = new CommandLineHelper()
 
@@ -275,7 +275,7 @@ class ZkGrailsTemplateGenerator implements GrailsTemplateGenerator, ResourceLoad
         return true
     }
 
-    private getTemplateText(String template) {
+    protected String getTemplateText(String template) {
         def application = grailsApplication
         // first check for presence of template in application
         if (resourceLoader && application?.warDeployed) {
@@ -304,7 +304,7 @@ class ZkGrailsTemplateGenerator implements GrailsTemplateGenerator, ResourceLoad
         return resources
     }
 
-    def getTemplateNames() {
+    Set<String> getTemplateNames() {
         Closure filter = { it[0..-5] }
         if (resourceLoader && application?.isWarDeployed()) {
             def resolver = new PathMatchingResourcePatternResolver(resourceLoader)
