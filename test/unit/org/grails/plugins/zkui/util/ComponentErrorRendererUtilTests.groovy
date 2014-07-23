@@ -21,7 +21,7 @@ class ComponentErrorRendererUtilTests extends ComposerUnitTestCase {
     }
 
     @Test
-    void should_add_renderMapAsErrors_to_InputElement() {
+    void testShouldAddRenderMapAsErrorsToInputElement() {
         ComponentErrorRendererUtil util = new ComponentErrorRendererUtil()
         util.addRenderMapAsErrors()
 
@@ -30,8 +30,5 @@ class ComponentErrorRendererUtilTests extends ComposerUnitTestCase {
         component.renderMapAsErrors(bean: params)
 
         assertEquals 'Name can not be empty', txt1.getErrorMessage()
-
-
     }
-
 }
